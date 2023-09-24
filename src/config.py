@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class AppSettings(BaseSettings):
     llama_cpp_dir_path: str
     whisper_cpp_dir_path: str
     files_dl_dir_path: str = "downloads"
@@ -10,10 +10,11 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
 
-_settings_instance = Settings()
+_settings_instance = None
 
 
-def get_config():
+def get_config() -> AppSettings:
     global _settings_instance
-    _settings_instance = _settings_instance or Settings()
+    if _settings_instance is None:
+        _settings_instance = AppSettings()
     return _settings_instance
