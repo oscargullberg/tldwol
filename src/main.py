@@ -12,6 +12,7 @@ config = get_config()
 LLAMA_CPP_DIR = config.llama_cpp_dir_path
 WHISPER_CPP_DIR = config.whisper_cpp_dir_path
 LLAMA_MODEL_PATH = config.llama_model_path
+WHISPER_MODEL_PATH = config.whisper_model_path
 
 
 def chunk_list(lst, chunk_size, min_chunk_size):
@@ -79,13 +80,12 @@ async def run_ffmpeg(input_file_path, output_file_path):
 
 async def run_whisper(input_file_path):
     whisper_binary_path = path_join(WHISPER_CPP_DIR, "main")
-    model_file_name = "ggml-large.bin"
     stderr_lines = []
     stdout_lines = []
     whisper_process = await asyncio.create_subprocess_exec(
         whisper_binary_path,
         "-m",
-        f"models/{model_file_name}",
+        WHISPER_MODEL_PATH,
         "-f",
         input_file_path,
         "-l",

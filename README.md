@@ -54,6 +54,7 @@ LLAMA_CPP_DIR_PATH=path/to/llama.cpp
 WHISPER_CPP_DIR_PATH=path/to/whisper.cpp
 FILES_DL_DIR_PATH=path/to/download/directory
 LLAMA_MODEL_PATH=path/to/model
+WHISPER_MODEL_PATH=/some/path/bin/whisper.cpp/models/ggml-large.bin
 ```
 
 ## Usage 🎮

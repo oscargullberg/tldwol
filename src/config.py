@@ -6,6 +6,7 @@ class AppSettings(BaseSettings):
     whisper_cpp_dir_path: str
     files_dl_dir_path: str = "downloads"
     llama_model_path: str
+    whisper_model_path: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
