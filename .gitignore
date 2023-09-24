@@ -1,0 +1,6 @@
+bin
+__pycache__
+temp
+.env
+.DS_Store
+Downloads

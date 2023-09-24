@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "tldwol"
+version = "0.1.0"
+description = ""
+authors = ["Oscar Gullberg <ogullberg@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "src", from = "." }]
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.1"
+uvicorn = "^0.23.2"
+yt-dlp = "^2023.7.6"
+aiohttp = "^3.8.5"
+pydantic-settings = "^2.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "src.main:start"
