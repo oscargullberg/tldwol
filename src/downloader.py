@@ -35,7 +35,6 @@ async def download_file(url, file_path=None):
     ) as session:
         print(f"Starting download file from {url}")
         async with session.get(url) as response:
-            print(response.status, "status")
             if response.status >= 400:
                 body = await response.text()
                 raise ValueError(

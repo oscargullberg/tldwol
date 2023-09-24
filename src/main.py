@@ -30,15 +30,15 @@ def chunk_list(lst, chunk_size, min_chunk_size):
 
 
 async def summarize_transcript_chunk(chunk):
-    instruction = f"Summarize the content below, capturing all essential elements such as key points, subjects, events, and insights. Include significant years. Use the style of a university professor taking notes. Content: '{chunk}'."
-    prompt = f"Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n### Instruction:\n{instruction}\n\n### Response:\n"
+    instruction = f"Summarize the content in a bullet list. Make sure to include the essential subjects, events and historical years. Write it from the viewpoint of an objective observer"
+    prompt = f"Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n ### Instruction:\n{instruction}\n\n### Input:\n{chunk}\n\n ### Response:\n\n"
     summary_lines = await run_llama(prompt)
     return linesep.join(summary_lines)
 
 
 async def summarize_summaries(joined_summaries):
-    instruction = f"Merge the provided sub-summaries into a single, cohesive summary that encompasses all critical elements. Rectify translation errors and inconsistencies. Use the style of a university professor presenting research findings. Content: '{joined_summaries}'.,"
-    prompt = f"Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n### Instruction:\n{instruction}\n\n### Response:\n"
+    instruction = f"Revise the content to create a objective summary divided into paragraphs that retains all information. Write it in the style of an academic review without refering to it as such."
+    prompt = f"Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request. \n ### Instruction:\n{instruction}\n\n### Input:\n'{joined_summaries}\n\n### Response:\n\n"
     summary_lines = await run_llama(prompt)
     return linesep.join(summary_lines)
 
@@ -123,12 +123,14 @@ async def run_llama(prompt: str):
         path_join(LLAMA_CPP_DIR, "main"),
         "--temp",
         "0.25",
-        "--top-k",
-        "20",
         "-c",
         "4096",
         "-n",
         "4096",
+        "--top-k",
+        "25",
+        "--repeat_penalty",
+        "1.20",
         "-m",
         LLAMA_MODEL_PATH,
         "--prompt",
@@ -196,7 +198,8 @@ async def index(url: str):
     print("line count: ", len(transcript_lines))
 
     print("chunking transcript")
-    transcript_chunks = chunk_list(transcript_lines, 70, 20)
+    ## Hack
+    transcript_chunks = chunk_list(transcript_lines, 60, 20)
     print(f"chunked transcript, {len(transcript_chunks)} chunks")
 
     chunk_summaries = []
@@ -205,9 +208,7 @@ async def index(url: str):
         chunk_summaries.append(summary)
 
     print("generating summary of summaries")
-    tldr = await summarize_summaries(
-        f"{linesep} Partial summary: {linesep}".join(chunk_summaries)
-    )
+    tldr = await summarize_summaries(f"{linesep}".join(chunk_summaries))
     print("generated summary of summaries")
     time_delta = time.time() - time_start
     print(f"execution time, s: {time_delta}")
