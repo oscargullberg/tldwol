@@ -6,9 +6,7 @@ from .config import get_config
 
 config = get_config()
 LLAMA_CPP_DIR = config.llama_cpp_dir_path
-WHISPER_CPP_DIR = config.whisper_cpp_dir_path
 LLAMA_MODEL_PATH = config.llama_model_path
-WHISPER_MODEL_PATH = config.whisper_model_path
 
 
 def _chunk_list(lst, chunk_size, min_chunk_size):
